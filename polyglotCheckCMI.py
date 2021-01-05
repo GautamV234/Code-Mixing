@@ -1,4 +1,5 @@
 from polyglot.detect import Detector
+from scipy.stats import pearsonr
 import os.path
 compareFile = open('compareFile.txt','w')
 readFile = open("Hinglish_train_14k_split_conll.txt","r",encoding='utf-8')
@@ -8,6 +9,10 @@ actualEng=0
 foundEng =0
 actualHin =0
 foundHin =0
+actualLangList =[]
+foundLangList=[]
+
+###  1 for Eng, -1 for Hin, 0 for no Lang
 for line in lines:
   if 'Eng' in line:
     for word in line.split():
@@ -19,13 +24,19 @@ for line in lines:
             compareFile.write("\n"+word + " -- "+ "Eng- "+' -English')
             actualEng+=1
             foundEng+=1
+            actualLangList.append(1)
+            foundLangList.append(1)
           else:
             compareFile.write("\n"+word + " -- "+ "Eng- "+' -Hindi')
             actualEng+=1
             foundHin+=1
+            actualLangList.append(1)
+            foundLangList.append(-1)
         except:
           compareFile.write("\n"+word + " -- "+ "Eng- "+' -Null')
           actualEng+=1
+          actualLangList.append(1)
+          foundLangList.append(0)
           # print("in word is "+word)
           # print(detector.language.name)
           # print(detector.language.confidence)
@@ -39,13 +50,20 @@ for line in lines:
             compareFile.write("\n"+word + " -- "+ "Hin- "+' -English')
             actualHin+=1
             foundEng+=1
+            actualLangList.append(-1)
+            foundLangList.append(1)
           else:
             compareFile.write("\n"+word + " -- "+ "Hin- "+' -Hindi')
             actualHin+=1
             foundHin+=1
+            actualLangList.append(-1)
+            foundLangList.append(-1)
+
         except:
           compareFile.write("\n"+word + " -- "+ "Hin- "+' -Null')
           actualHin+=1
+          actualLangList.append(-1)
+          foundLangList.append(0)
           # print("in word is "+word)
           # print(detector.language.name)
           # print(detector.language.confidence)
@@ -91,6 +109,10 @@ print("Actual cmi value is "+str(cmiActual))
 n = numOfTokens
 maxW = max(foundEng,foundHin)
 cmiFound = 100* (1-(maxW/(foundEng+foundHin)))
-print("Found cmi value using PolyGlot Comparision is "+str(cmiFound))
+print("Found cmi value is "+str(cmiFound))
 
+### finding the Pearson Correlation Coefficient
+correlation, p_value = pearsonr(actualLangList, foundLangList)
+print(correlation)
+ 
 # print(line)
