@@ -9,6 +9,9 @@ u=0
 n=0
 cmi=0
 maxW=0
+a=1
+
+
 for line in lines:
   if 'Eng' in line:
   	# print(line)

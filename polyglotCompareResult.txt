@@ -1,0 +1,15 @@
+Results acquired for words of len>2
+
+threshold value = 80%
+
+actual English = 69222
+
+found English = 68819
+
+actual Hindi = 125786
+
+found Hindi = 124683
+
+Actual cmi value is 35.497005251066625
+
+Found cmi value is 35.56500708003018
